@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import './App.css';
-import Person from './Person/Person';
+import classes from './App.module.css';
+import Person from '../components/Persons/Person/ErrorPerson';
+import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
 
 class App extends Component {
   state = {
@@ -32,30 +33,22 @@ class App extends Component {
   }
 
   render() {
-    const style = {
-      backgroundColor: this.state.showPersons ? 'red' : 'green',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer'
-    };
-
-    const classes = [];
+    const btnClass = this.state.showPersons ? classes.Red : '';
+    const assignedClasses = [];
     if (this.state.persons.length <= 2) {
-      classes.push('red');
+      assignedClasses.push( classes.red );
     }
     if (this.state.persons.length <= 1) {
-      classes.push('bold');
+      assignedClasses.push( classes.bold );
     }
 
     return (
-      <div className="App">
+      <div className={classes.App}>
         <h1>Hi, I'm a React App.</h1>
-        <p className={classes.join(' ')}>This is really working</p>
+        <p className={assignedClasses.join(' ')}>This is really working</p>
         <button
           onClick={this.togglePersonHandler}
-          style={style}
+          className={btnClass}
         >
           Toggle Persons
         </button>
@@ -63,13 +56,15 @@ class App extends Component {
         { 
           this.state.showPersons &&
           this.state.persons.map(({ id, name, age }, index) => (
-            <Person
-              key={id}
-              name={name}
-              age={age}
-              click={() => this.deletePersonHandler(index)}
-              changed={(event) => this.nameChangeHandler(event, id)}
-            />
+            <ErrorBoundary 
+              key={id}>
+              <Person
+                name={name}
+                age={age}
+                click={() => this.deletePersonHandler(index)}
+                changed={(event) => this.nameChangeHandler(event, id)}
+              />
+            </ErrorBoundary>
           ))
         }
         </div>
