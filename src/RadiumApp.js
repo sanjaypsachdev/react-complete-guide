@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import Radium, { StyleRoot } from 'radium';
 import Person from './Person/Person';
 
 class App extends Component {
@@ -38,7 +39,11 @@ class App extends Component {
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      ':hover': {
+        backgroundColor: this.state.showPersons ? 'salmon' : 'lightgreen',
+        color: 'black'
+      }
     };
 
     const classes = [];
@@ -50,32 +55,34 @@ class App extends Component {
     }
 
     return (
-      <div className="App">
-        <h1>Hi, I'm a React App.</h1>
-        <p className={classes.join(' ')}>This is really working</p>
-        <button
-          onClick={this.togglePersonHandler}
-          style={style}
-        >
-          Toggle Persons
-        </button>
-        <div>
-        { 
-          this.state.showPersons &&
-          this.state.persons.map(({ id, name, age }, index) => (
-            <Person
-              key={id}
-              name={name}
-              age={age}
-              click={() => this.deletePersonHandler(index)}
-              changed={(event) => this.nameChangeHandler(event, id)}
-            />
-          ))
-        }
+      <StyleRoot>
+        <div className="App">
+          <h1>Hi, I'm a React App.</h1>
+          <p className={classes.join(' ')}>This is really working</p>
+          <button
+            onClick={this.togglePersonHandler}
+            style={style}
+          >
+            Toggle Persons
+          </button>
+          <div>
+          { 
+            this.state.showPersons &&
+            this.state.persons.map(({ id, name, age }, index) => (
+              <Person
+                key={id}
+                name={name}
+                age={age}
+                click={() => this.deletePersonHandler(index)}
+                changed={(event) => this.nameChangeHandler(event, id)}
+              />
+            ))
+          }
+          </div>
         </div>
-      </div>
+      </StyleRoot>
     );
   }
 }
 
-export default App;
+export default Radium(App);
