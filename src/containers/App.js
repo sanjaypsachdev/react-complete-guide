@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classes from './App.module.css';
-import Person from '../components//Persons/Person/Person';
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
+import WithClass from '../hoc/WithClass';
 
 class App extends Component {
   state = {
@@ -10,7 +12,8 @@ class App extends Component {
       { id: 3, name: 'Stephenie', age: 29 }
     ],
     otherState: 'some other value',
-    showPersons: false
+    showPersons: false,
+    showCockpit: true
   }
 
   deletePersonHandler = (personIndex) => {
@@ -32,40 +35,34 @@ class App extends Component {
   }
 
   render() {
-    const btnClass = this.state.showPersons ? classes.Red : '';
-    const assignedClasses = [];
-    if (this.state.persons.length <= 2) {
-      assignedClasses.push( classes.red );
-    }
-    if (this.state.persons.length <= 1) {
-      assignedClasses.push( classes.bold );
-    }
-
     return (
-      <div className={classes.App}>
-        <h1>Hi, I'm a React App.</h1>
-        <p className={assignedClasses.join(' ')}>This is really working</p>
+      <WithClass classes={classes.App}>
         <button
-          onClick={this.togglePersonHandler}
-          className={btnClass}
-        >
-          Toggle Persons
+          onClick={() => {
+            this.setState((prevState) => ({
+              showCockpit: !prevState.showCockpit
+            }))
+          }}>
+          {this.state.showCockpit ? 'Remove Cockpit' : 'Show Cockpit'}
         </button>
-        <div>
-        { 
-          this.state.showPersons &&
-          this.state.persons.map(({ id, name, age }, index) => (
-            <Person
-              key={id}
-              name={name}
-              age={age}
-              click={() => this.deletePersonHandler(index)}
-              changed={(event) => this.nameChangeHandler(event, id)}
-            />
-          ))
+        {
+          this.state.showCockpit &&
+          <Cockpit
+            title={this.props.appTitle}
+            showPersons={this.state.showPersons}
+            personsLength={this.state.persons.length}
+            clicked={this.togglePersonHandler}
+          />
         }
-        </div>
-      </div>
+        {
+          this.state.showPersons &&
+          <Persons
+            persons={this.state.persons}
+            clicked={this.deletePersonHandler}
+            changed={this.nameChangeHandler}
+          />
+        }
+      </WithClass>
     );
   }
 }

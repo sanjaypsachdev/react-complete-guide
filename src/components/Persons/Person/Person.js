@@ -1,13 +1,30 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import  classes from'./Person.module.css';
+import withClassFunc from '../../../hoc/withClassFunc';
 
-const person = ( props ) => {
+const Person = ( props ) => {
+  const nameInputRef = useRef(null);
+
+  useEffect(() => {
+    nameInputRef.current.focus();
+  }, []);
+
   return (
-    <div className={classes.Person}>
-      <p onClick={props.click}>I'm {props.name} and I am {props.age} years old!</p>
+    <>
+      <p
+        onClick={props.click}
+      >
+        I'm {props.name} and I am {props.age} years old!
+      </p>
       {props.children &&  <p>{props.children}</p>}
-      <input type="text" onChange={props.changed} value={props.name} />
-    </div>
+      <input
+        type="text"
+        ref={nameInputRef}
+        onChange={props.changed}
+        value={props.name}
+      />
+    </>
   )
 };
 
@@ -21,4 +38,11 @@ const person = ( props ) => {
 //   }
 // }
 
-export default person;
+Person.propTypes = {
+  click: PropTypes.func,
+  name: PropTypes.string,
+  age: PropTypes.number,
+  changed: PropTypes.func
+};
+
+export default withClassFunc(Person, classes.Person);
