@@ -8,4 +8,16 @@ const withClassFunc = (WrappedComponent, className) => {
   )
 }
 
+// const withClassFunc = (WrappedComponent, className) => {
+//   return class extends React.Component {
+//     render() {
+//       return (
+//         <div className={className}>
+//           <WrappedComponent {...this.props} />
+//         </div>
+//       )
+//     }
+//   }
+// }
+
 export default withClassFunc;

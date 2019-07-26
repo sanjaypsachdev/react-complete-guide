@@ -1,10 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import  classes from'./Person.module.css';
 import withClassFunc from '../../../hoc/withClassFunc';
+import AuthContext from '../../../context/auth-context';
 
 const Person = ( props ) => {
   const nameInputRef = useRef(null);
+  const authContext = useContext(AuthContext);
 
   useEffect(() => {
     nameInputRef.current.focus();
@@ -12,6 +14,11 @@ const Person = ( props ) => {
 
   return (
     <>
+        { 
+          authContext.authenticated ?
+            <p>Authenticated !</p> :
+            <p>Please log in !</p>
+        }
       <p
         onClick={props.click}
       >
